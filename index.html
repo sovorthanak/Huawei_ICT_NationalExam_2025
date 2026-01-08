@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Huawei Cloud / AI / Big Data Mock Exam Quiz (90 Questions)</title>
+<style>
+  :root{
+    --bg:#0b1220;
+    --card:#121c2f;
+    --border:rgba(255,255,255,.12);
+    --text:#eaf0ff;
+    --muted:#aab4d4;
+    --blue:#90EE90;
+    --red:#ef4444;
+    --accent:#2563eb;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#0b1220,#060a14);
+    font-family:system-ui,Segoe UI,Roboto,sans-serif;
+    color:var(--text);
+    padding:18px;
+  }
+  .card{
+    width:100%;
+    max-width:760px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 25px 45px rgba(0,0,0,.45);
+  }
+  .top{
+    display:flex; gap:12px; flex-wrap:wrap;
+    justify-content:space-between; align-items:flex-end;
+    margin-bottom:12px;
+  }
+  .meta{font-size:14px; color:var(--muted)}
+  .score{
+    font-size:14px; color:var(--muted);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:8px 12px;
+    background:rgba(255,255,255,.03);
+  }
+  .question{
+    font-size:18px;
+    margin:10px 0 14px;
+    line-height:1.4;
+    white-space:pre-wrap;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:6px;
+  }
+  .option{
+    padding:12px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+    cursor:pointer;
+    transition:.15s;
+    text-align:left;
+    color:var(--text);
+    font-size:15px;
+  }
+  .option:hover{background:rgba(255,255,255,.08)}
+  /* correct highlighted in yellow */
+  .option.correct{
+    background:rgba(250,204,21,.25);
+    border-color:var(--blue);
+    color:#fff;
+  }
+  .option.wrong{
+    background:rgba(239,68,68,.25);
+    border-color:var(--red);
+  }
+  .option:disabled{cursor:not-allowed; opacity:.95}
+
+  .helper{
+    margin-top:12px;
+    padding:12px;
+    border-radius:12px;
+    border:1px dashed rgba(255,255,255,.18);
+    background:rgba(255,255,255,.03);
+    color:var(--muted);
+    display:none;
+    line-height:1.45;
+  }
+  .helper.show{display:block}
+
+  .footer{
+    margin-top:16px;
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+  }
+  .btn{
+    padding:10px 16px;
+    border-radius:12px;
+    border:none;
+    background:var(--accent);
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn.secondary{
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--border);
+    color:var(--text);
+  }
+  .btn:disabled{opacity:.5; cursor:not-allowed}
+
+  /* multi */
+  .row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .checkline{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+  }
+  .checkline.correct{
+    background:rgba(250,204,21,.25);
+    border-color:var(--blue);
+  }
+  .checkline.wrong{
+    background:rgba(239,68,68,.25);
+    border-color:var(--red);
+  }
+  .checkline input{ transform:translateY(2px); }
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+  <div class="top">
+    <div class="meta" id="progress">Question 1 of 90</div>
+    <div class="score" id="score">Score: 0 / 90</div>
+  </div>
+
+  <div class="question" id="question"></div>
+
+  <div id="content"></div>
+
+  <div class="helper" id="helper"></div>
+
+  <div class="footer">
+    <button class="btn secondary" id="restartBtn">Restart</button>
+    <button class="btn" id="nextBtn" disabled>Next</button>
+  </div>
+</div>
+
+<script>
+/* ======= Quiz Data (90 Questions) ======= */
+const quiz = [
+  // 1-40 Single choice
+  {num:1, type:"single", q:"Which of the following statements is true about the features of Huawei Cloud AI development platform ModelArts?",
+    options:[
+      "ModelArts only supports preprocessing of local data.",
+      "ModelArts does not support deep learning frameworks such as TensorFlow and PyTorch.",
+      "ModelArts supports end-to-end AI development, from data labeling and model training to evaluation and deployment.",
+      "ModelArts does not support GPU acceleration during model training."
+    ], answer:2},
+
+  {num:2, type:"single", q:"Which of the following statements is false about MindSpore optimization and features?",
+    options:[
+      "MindSpore improves distributed training performance using automatic parallelism.",
+      "MindSpore supports device-edge-cloud synergy development and deployment.",
+      "MindSpore can optimize the model running efficiency through operator fusion.",
+      "MindSpore supports only Python for model development."
+    ], answer:3},
+
+  {num:3, type:"single", q:"Which of the following statements about the history of Pangu Large Models is false?",
+    options:[
+      "In September 2021, the Pangu multimodal model and Pangu scientific computing model were introduced.",
+      "In 2022, Huawei Cloud introduced Pangu models tailored for industry-specific tasks such as weather forecasting and mining operations, showcasing the potential of Pangu Large Models in various application scenarios.",
+      "In July 2024, the milestone research results of the Pangu-Weather model were published in Nature.",
+      "Pangu Large Models were initiated in 2019 and officially launched in April 2021."
+    ], answer:2},
+
+  {num:4, type:"single", q:"Which of the following frameworks is used by Flink to process SQL statements?",
+    options:["Calcite","SQLParser","JOOQ","ANTLR"], answer:0},
+
+  {num:5, type:"single", q:"A pressure test had think time set to 1,000 ms. The test lasted for 10 minutes with 10 concurrent users. How many concurrent requests will the test have?",
+    options:["9000","12000","3000","6000"], answer:3},
+
+  {num:6, type:"single", q:"Which of the following is false about Application Performance Management (APM)?",
+    options:[
+      "It monitors application latency.",
+      "It quickly locates exceptions.",
+      "It displays performance metrics.",
+      "It migrates cloud data."
+    ], answer:3},
+
+  {num:7, type:"single", q:"Which of the following is not an application scenario of CCE?",
+    options:[
+      "Containerized database services in key fields like enterprise and finance need to be scaled in or out dynamically to ensure services can run efficiently and cross-region high availability can be ensured.",
+      "Service loads of live streaming require real-time scaling in or out based on CPU or memory usage.",
+      "Traffic governance of microservices is built on containers and capabilities like grayscale release, traffic governance, and traffic monitoring are needed.",
+      "Cloud computing resources often need to be expanded quickly and automatically during traffic surges caused by e-commerce promotions and flash sales."
+    ], answer:3},
+
+  {num:8, type:"single", q:"You can create Deployments on Huawei Cloud Container Engine (CCE). Which of the following statements is false about Deployments?",
+    options:[
+      "Storage volumes cannot be mounted to Deployments.",
+      "Different pods have the same response to the same request.",
+      "Runtime data will be lost after a pod is restarted.",
+      "Data that needs to be stored persistently is not stored locally."
+    ], answer:0},
+
+  {num:9, type:"single", q:"Which of the following statements about the differences between security groups and network ACLs is false?",
+    options:[
+      "Security groups are mandatory for ECSs, but network ACLs are optional.",
+      "Both security groups and network ACLs support the allow and deny actions.",
+      "Both security groups and network ACLs can be used to protect communications between Elastic Cloud Servers (ECS) in the same subnet.",
+      "Security groups support packet filtering based on a 3-tuple. Network ACLs support packet filtering based on a 5-tuple."
+    ], answer:1},
+
+  {num:10, type:"single", q:"Which of the following statements is false about Docker images?",
+    options:[
+      "Docker images are composed of layers.",
+      "Once you have made the necessary modifications to a container, you can use the docker commit command to create a new image.",
+      "The metadata of each image layer is stored in JSON files.",
+      "Docker images can be built only using Dockerfiles."
+    ], answer:3},
+
+  {num:11, type:"single", q:"Which of the following actions can be done to prevent single points of failure (SPOFs) when you use Huawei Cloud Elastic Load Balance (ELB)?",
+    options:[
+      "Deploy ECSs in different AZs and associate them with a load balancer to improve local availability.",
+      "Single points of failure (SPOFs) cannot be avoided.",
+      "Create multiple load balancers in the same region and configure DNS records so that load balancers can provide services in polling mode to improve local availability.",
+      "Create multiple load balancers in different regions and configure DNS records so that load balancers can provide services in polling mode to improve cross-region availability."
+    ], answer:0},
+
+  {num:12, type:"single", q:"A tenant plans to deploy a website application using Huawei Cloud Container Engine (CCE). After purchasing a Huawei Cloud CCE cluster, the tenant deploys various components of the website in different modes. Which of the following is not a good option?",
+    options:[
+      "Deploying a log deletion script in a cron job",
+      "Deploying a Tomcat server in a job",
+      "Deploying a MySQL database using Helm charts",
+      "Deploying an Nginx server in a Deployment"
+    ], answer:1},
+
+  {num:13, type:"single", q:"A user creates an IPv4 subnet with a CIDR block of 192.168.0.0/25. How many hosts at most can be deployed in this subnet?",
+    options:["510","62","254","126"], answer:3},
+
+  {num:14, type:"single", q:"An enterprise deploys its services on Huawei Cloud and each department has its own HUAWEI ID and Virtual Private Cloud (VPC). Suppose there are three departments: A, B, and C. Department A hosts a file sharing website in its VPC, allowing all employees to access shared data. Department B needs to upload attendance data to a database in Department A's VPC. Department C must access this database to calculate payroll. How can the enterprise administrator configure VPC peering connections?",
+    options:[
+      "VPC peering connections cannot be used to connect VPCs in different accounts.",
+      "They can configure a VPC peering connection between the VPCs of departments B and C.",
+      "They can configure a VPC peering connection between the VPCs of departments A and B.",
+      "They can configure VPC peering connections between the VPCs of departments A and C, and the VPCs of departments A and B."
+    ], answer:3},
+
+  {num:15, type:"single", q:"A company needs to add online storage for archiving a large number of its website logs. Which of the following Huawei Cloud services is recommended?",
+    options:["Scalable File Service (SFS)","Elastic Volume Service (EVS)","Cloud Backup and Recovery (CBR)","Object Storage Service (OBS)"], answer:3},
+
+  {num:16, type:"single", q:"A startup company wants to launch its website portal on Huawei Cloud. They do not require high performance, but they require high cost-effectiveness. Which of the following types of ECSs is recommended?",
+    options:["Memory-intensive ECSs","Storage-intensive ECSs","Computing-intensive ECSs","General-purpose ECSs"], answer:3},
+
+  {num:17, type:"single", q:"Which of the following services in a Huawei Cloud hybrid cloud solution can help achieve zero RPO and an RTO of less than 30 minutes across AZs to ensure zero data loss?",
+    options:["Volume Backup Service (VBS)","Cloud Server Backup Service (CSBS)","Cloud Backup and Recovery (CBR)","Storage Disaster Recovery Service (SDRS)"], answer:3},
+
+  {num:18, type:"single", q:"Which of the following cluster types is not supported by Cloud Container Engine (CCE)?",
+    options:["CCE Windows","CCE Turbo","CCE standard","CCE Autopilot"], answer:0},
+
+  {num:19, type:"single", q:"In Internet gaming scenarios, frequent changes to gaming services require changes to the table structures. Customers want to minimize the impacts of such changes. Which of the following database services is recommended?",
+    options:["Document Database Service (DDS)","Relational Database Service (RDS)","Data Admin Service (DAS)","Database Security Service (DBSS)"], answer:0},
+
+  {num:20, type:"single", q:"In scenarios where a large amount of data needs to be processed, such as large-scale parallel processing data warehouse, MapReduce, and Hadoop computing-intensive scenarios, ECSs need to provide local disks with high storage bandwidth and IOPS, and be able to exchange and process data quickly. For better performance and lower price, which of the following types of ECSs is recommended?",
+    options:["GPU-accelerated ECSs","Large-memory ECSs","General computing-basic ECSs","Disk-intensive ECSs"], answer:3},
+
+  {num:21, type:"single", q:"Which of the following statements about the variance and deviation in data mining models is false?",
+    options:[
+      "The deviation is the difference between the average of the predicted values and the true value.",
+      "The variance is the average of the squared differences of a model's prediction results from their mean.",
+      "The final prediction error is only affected by the variance and deviation.",
+      "The variance arises from the sensitivity error of the model to small fluctuations on a training set."
+    ], answer:2},
+
+  {num:22, type:"single", q:"Which of the following options utilizes the embedded method for feature selection?",
+    options:["Mutual information","L1 regularization","Analysis of variance","Recursive feature elimination"], answer:1},
+
+  {num:23, type:"single", q:"Assume you need to use Spark MLlib to convert a DataFrame having 3 rows and 4 columns to two-dimensional data. Which of the following approaches is incorrect?",
+    options:[
+      "Convert the DataFrame to a 3x4 matrix.",
+      "Calculate the right eigenvector of the covariance matrix.",
+      "Use the PCA algorithm to select eigenvectors corresponding to the two smallest eigenvalues, and form a matrix with these eigenvectors.",
+      "Find the covariance matrix of the 3x4 matrix."
+    ], answer:2},
+
+  {num:24, type:"single", q:"Which of the following statements is false about the scenario-based big data real-time retrieval solution?",
+    options:[
+      "HBase is used for primary key search (key-value search). The search criteria are simple.",
+      "Elasticsearch is used for full-text retrieval or as non-primary key indexes for HBase storage. Elasticsearch can store both data and indexes, but it is only appropriate for smaller sites because it is not cost-effective.",
+      "GES is a graph database based on the Hadoop ecosystem. Underlying data is stored in HBase and Elasticsearch, supporting quick search of graphs.",
+      "Real-time search engines Elasticsearch and HBase are suitable for quick retrieval (query based on specified criteria). They are not suitable for statistical query (such as queries using the GROUP and SUM statements) and complex query (such as queries using the JOIN and IN statements and subqueries)."
+    ], answer:1},
+
+  {num:25, type:"single", q:"Which of the following statements is false about the differences between Hive internal and external tables?",
+    options:[
+      "When a table is deleted, the metadata and data of an internal table are deleted together.",
+      "If an external table is created, only the data path is recorded when data is imported and the data location is not changed.",
+      "When a table is deleted, only the data of an external table is deleted (metadata is retained).",
+      "When creating an internal table, Hive moves data to the path to which the data warehouse points during data import."
+    ], answer:2},
+
+  {num:26, type:"single", q:"When shuffling occurs, in which format will the MapTask calculation results be distributed to the corresponding tasks?",
+    options:["Key-value pair","Binary mode","Sequence","RDD"], answer:0},
+
+  {num:27, type:"single", q:"HBase is a distributed NoSQL database. Which of the following statements about HBase is false?",
+    options:[
+      "The table structure is sparse.",
+      "HBase uses ZooKeeper as a collaboration service.",
+      "HBase is suitable for storing large table data and can read and write large table data in real time.",
+      "HBase uses Hive to store underlying data."
+    ], answer:3},
+
+  {num:28, type:"single", q:"Which of the following architectures is used by Huawei's Ascend 910 chips?",
+    options:["Ascend","Gauss","Da Vinci","von Neumann"], answer:2},
+
+  {num:29, type:"single", q:"Which of the following is a use case for ModelArts ExeML predictive analytics?",
+    options:["Housing prices forecasting","Image segmentation","Facial recognition","Flower classification"], answer:0},
+
+  {num:30, type:"single", q:"Long short-term memory (LSTM) is a type of recurrent neural network (RNN) and is characterized by its cell state and gate structure. Which of the following is not considered a gate structure in LSTM?",
+    options:["Forget","Input","Output","Memory"], answer:3},
+
+  {num:31, type:"single", q:"The field of AI has its roots in expert systems, which emerged in the 1960s and 1970s and reached its peak in the 1980s. Which of the following schools do expert systems belong to?",
+    options:["Symbolism","None of the above","Connectionism (neural network)","Behaviorism (robot animals)"], answer:0},
+
+  {num:32, type:"single", q:"During model training and evaluation, overfitting and underfitting often occur. Which of the following statements about overfitting and underfitting is true?",
+    options:[
+      "Underfitting means that a model performs well during training but poorly during prediction.",
+      "In terms of evaluation metrics, overfitting means that a model performs well on the training set but poorly on the test set and new data.",
+      "Underfitting means that a model performs poorly during training but well during prediction.",
+      "Overfitting means that a model does not fully fit its training data."
+    ], answer:1},
+
+  {num:33, type:"single", q:"Which of the following statements about the median filter is false?",
+    options:[
+      "It is a filter of the template sorting operation.",
+      "It is not practical for reducing salt-and-pepper noise. Boundary information of an image is lost when the median filter reduces random noise of the image.",
+      "Median filtering is widely used to reduce salt and pepper noise effectively. It cancels noise while preserving the image's sharpness.",
+      "It replaces the original pixel value with the median output of the pixel values sorted in the neighborhood."
+    ], answer:1},
+
+  {num:34, type:"single", q:"Which of the following is not a labeling type for creating an image dataset in ModelArts data management?",
+    options:["Image classification","Image segmentation","Object detection","Image generation"], answer:3},
+
+  {num:35, type:"single", q:"If a model has a low bias and high variance on the test set, which problem does this model have?",
+    options:["Neither underfitting nor overfitting","Overfitting or underfitting, both of which are likely","Underfitting","Overfitting"], answer:3},
+
+  {num:36, type:"single", q:"A convolution kernel is a crucial element in image processing and computer vision. Which of the following is the main function of a convolution kernel?",
+    options:["Extracting local features","Dimension reduction","Image resizing","Color enhancement"], answer:0},
+
+  {num:37, type:"single", q:"Which of the following compute resources is not supported by ModelArts for creating a training job?",
+    options:["Ascend","GPU","TPU","CPU"], answer:2},
+
+  {num:38, type:"single", q:"A 3 x 3 convolution kernel is used to convolve a three-channel color image. In this case, what is the total number of parameters that need to be learned?",
+    options:["27","10","28","9"], answer:2},
+
+  {num:39, type:"single", q:"Which of the following is the process of ModelArts ExeML?",
+    options:[
+      "Data labeling -> Service deployment -> Model training",
+      "Data labeling -> Model training -> Service deployment",
+      "Model training -> Data labeling -> Service deployment",
+      "Service deployment -> Model training -> Data labeling"
+    ], answer:1},
+
+  {num:40, type:"single", q:"When you use ModelArts ExeML to build a predictive analytics project, if the label column contains numeric continuous data, what is the label column data type and trained model type?",
+    options:[
+      "Discrete value and regression model",
+      "Discrete value and classification model",
+      "Continuous value and classification model",
+      "Continuous value and regression model"
+    ], answer:3},
+
+  // 41-70 Multiple choice
+  {num:41, type:"multi", q:"What are the main functions of Huawei Cloud MRS one-stop big data platform?",
+    options:["Data visualization","Offline computing","Real-time computing","Interactive analysis"], answer:[1,2,3]},
+
+  {num:42, type:"multi", q:"Cloud Data Migration (CDM) of Huawei Cloud can migrate data of different systems. Which of the following systems does CDM support?",
+    options:["Elasticsearch","HBase","Pulsar","GaussDB"], answer:[0,1,3]},
+
+  {num:43, type:"multi", q:"Auto Scaling (AS) scaling policies are supported by AS?",
+    options:["Periodic policies","Scheduled policies","Priority policies","Alarm-based policies"], answer:[0,1,3]},
+
+  {num:44, type:"multi", q:"Which of the following statements are true about Dedicated Distributed Storage Service (DSS)?",
+    options:[
+      "The capacity of storage pools can be expanded based on service requirements.",
+      "DSS disks cannot be expanded while services are running.",
+      "Three-copy redundancy based on the dedicated distributed storage is available.",
+      "Backups can be created for DSS disks."
+    ], answer:[0,2,3]},
+
+  {num:45, type:"multi", q:"Which of the following are advantages of containers compared with VMs?",
+    options:["Lightweight with fewer resources","Better isolation","Startup in seconds","Fine granularity and high resource utilization"], answer:[0,2,3]},
+
+  {num:46, type:"multi", q:"Which of the following statements are true about the Docker technologies?",
+    options:[
+      "Namespaces encapsulate the global resources of the kernel, and each namespace provides a separate global resource.",
+      "Union Filesystems are hierarchical, lightweight, high-performance file systems.",
+      "StatefulSets limit what system resources can be used by a process group.",
+      "runc is a cluster system daemon that runs as a backend process."
+    ], answer:[0,1]},
+
+  {num:47, type:"multi", q:"Which of the following statements about AOM are true?",
+    options:[
+      "It provides functions such as batch disk cleanup, job orchestration, and script execution, and standardizes and automates routine O&M.",
+      "It provides atomic operations such as batch script execution, file distribution, and cloud service change. You can also customize atomic operations for assembly into jobs and standard O&M processes.",
+      "It monitors traces and restores execution tracks and statuses of service requests in distributed systems for troubleshooting.",
+      "It manages data from Cloud Eye, LTS, and APM for unified monitoring and analysis."
+    ], answer:[0,1,2,3]},
+
+  {num:48, type:"multi", q:"Which of the following statements about Cloud Connect are true?",
+    options:[
+      "Subnets of the VPCs loaded to a cloud connection cannot conflict with each other.",
+      "Cloud Connect can connect VPCs of the same account only.",
+      "Cloud Connect can connect VPCs of different accounts.",
+      "Cloud Connect can connect VPCs in different regions."
+    ], answer:[0,2,3]},
+
+  {num:49, type:"multi", q:"A company deploys its ECSs in different VPCs in the same region. Which of the following solutions can enable the ECSs to share data?",
+    options:[
+      "Using SFS and configuring cross-VPC access",
+      "Using SFS Turbo and configuring VPC peering connections to enable communications among multiple VPCs in the same region",
+      "Using obsfs to mount OBS parallel file systems to Linux operating systems",
+      "Using EVS"
+    ], answer:[0,1,2]},
+
+  {num:50, type:"multi", q:"In a Huawei Cloud two-city, three-center DR solution, which of the following can be used to provide DR functions and improve reliability?",
+    options:[
+      "DNS can be used to query the public IP addresses of the production and DR centers, and direct 100% of user traffic to the production center, except in the event of a disaster. If there is a disaster, then 100% of the user traffic is directed to the DR center.",
+      "RDS + DRS can be used for real-time DR for RDS database instances deployed at two remote sites.",
+      "CBR can be used to back up system and data disks of cloud servers across regions, create images using backups if a disaster occurs, and restore services and data carried on the cloud servers at the DR site.",
+      "ModelArts can be used for massive data preprocessing, large-scale distributed training, and management of the entire lifecycle of AI workflows."
+    ], answer:[0,1,2]},
+
+  {num:51, type:"multi", q:"What are the image processing capabilities provided by Object Storage Service (OBS)?",
+    options:[
+      "Getting information about an image",
+      "Cropping, compressing, and slimming images",
+      "Configuring text and image watermarks",
+      "Converting image formats"
+    ], answer:[0,1,2,3]},
+
+  {num:52, type:"multi", q:"OBS provides tools for storage management. Which of the following statements about these tools are false?",
+    options:[
+      "obsfs is a UI tool for accessing and managing OBS resources. It is recommended for batch processing and automated tasks.",
+      "OBS SDKs encapsulate the REST API provided by OBS to simplify development.",
+      "obsutil is a tool based on FUSE and is used to mount OBS parallel file systems to Linux operating systems.",
+      "OBS Browser+ is a graphical Windows client that lets you manage OBS resources from your desktop with ease."
+    ], answer:[0,2]},
+
+  {num:53, type:"multi", q:"Which of the following are load balancing algorithms supported by shared and dedicated load balancers?",
+    options:["Source IP hash","Destination IP address","Weighted least connections","Weighted round robin"], answer:[0,2,3]},
+
+  {num:54, type:"multi", q:"In the Kubernetes architecture, which of the following components are deployed on master nodes?",
+    options:["kubelet","Scheduler","etcd","Controller manager"], answer:[1,2,3]},
+
+  {num:55, type:"multi", q:"Which of the following statements are true about the Spark MLlib classification algorithm?",
+    options:[
+      "Linear SVMs in MLlib only support binary classification. Logistic regression supports both binary and multiclass classification.",
+      "MLlib supports two linear methods: linear Support Vector Machines (SVMs) and logistic regression.",
+      "In MLlib, RDD represents the training dataset. The label index starts from 0. For binary labels, y is +1 for positive and -1 for negative.",
+      "In MLlib, the linear SVM uses L2 regularization for training and also supports L1 regularization."
+    ], answer:[0,1,3]},
+
+  {num:56, type:"multi", q:"Which of the following statements are true about the Flume architecture?",
+    options:[
+      "The interceptor is used to modify collected data based on user configuration.",
+      "The channel selector is used to place data in different channels based on user configuration.",
+      "A channel processor caches the data sent from the sink into the channel.",
+      "Source indicates the data source, which is the source of log information. Flume abstracts it into events."
+    ], answer:[0,1,3]},
+
+  {num:57, type:"multi", q:"Which of the following statements are true about the similarities and differences between Spark and MapReduce?",
+    options:[
+      "Spark provides 100 times the performance of MapReduce.",
+      "Compared with MapReduce, Spark allows users to develop faster by supporting more operations on datasets and providing more flexible programming models.",
+      "Spark has a higher fault tolerance capability (Spark Lineage) than MapReduce.",
+      "Spark stores intermediate data in disks, which lowers the latency and improves the efficiency of iterative computing and batch processing."
+    ], answer:[1,2]},
+
+  {num:58, type:"multi", q:"Which of the following statements are true about the Hive data storage model?",
+    options:[
+      "A table corresponds to a directory in HDFS.",
+      "You must specify a database when creating a table.",
+      "A partition corresponds to a subdirectory in the directory where a table is located.",
+      "A bucket corresponds to a file under the directory where a table or partition resides."
+    ], answer:[0,2,3]},
+
+  {num:59, type:"multi", q:"Which of the following are part of the speech synthesis process?",
+    options:["Text normalization","Result evaluation","Text-to-phoneme conversion","Waveform generation"], answer:[0,2,3]},
+
+  {num:60, type:"multi", q:"Which of the following are image data augmentation methods?",
+    options:["Modifying images to add sub-images","Stretching","Flipping","Resizing"], answer:[1,2,3]},
+
+  {num:61, type:"multi", q:"Which of the following are parameters for a Hidden Markov Model?",
+    options:["Language probability","Emission probability","Initial probability","Transfer probability"], answer:[1,2,3]},
+
+  {num:62, type:"multi", q:"Which of the following statements about the GMM-HMM acoustic model are true?",
+    options:[
+      "A Markov chain is a stochastic discrete-event process that satisfies the Markov property: future depends only on the present state.",
+      "The goal of Markov model is to learn the probabilities of state transitions based on observable data.",
+      "Third-order HMM models are commonly used in speech recognition tasks.",
+      "GMM-HMM is an acoustic model. The next step is to use a language model to generate text."
+    ], answer:[0,1,3]},
+
+  {num:63, type:"multi", q:"Which of the following algorithms can be used for text classification?",
+    options:["Naive Bayes","TextCNN","Linear regression","Support vector machine (SVM)"], answer:[0,1,3]},
+
+  {num:64, type:"multi", q:"Which of the following are convolutional neural networks?",
+    options:["VGG16","Residual neural network (ResNet)","Long short-term memory (LSTM)","Recurrent neural network (RNN)"], answer:[0,1]},
+
+  {num:65, type:"multi", q:"When documents are scanned for character recognition, the text can be hard to recognize if they are tilted at certain angles. What techniques can help fix this issue?",
+    options:["Perspective transformation","Rotational transformation","Affine transformation","Gray level transformation"], answer:[0,1,2]},
+
+  {num:66, type:"multi", q:"Which of the following tasks are supported by ModelArts?",
+    options:["Genome sequencing","Image detection","Image segmentation","Image classification"], answer:[1,2,3]},
+
+  {num:67, type:"multi", q:"The third step of training a neural network is to calculate the loss. Which of the following are the first and second steps?",
+    options:[
+      "Define the network structure and initialize network parameters.",
+      "The model reaches convergence and the training ends.",
+      "Update parameters by using gradient descent and backpropagation algorithms to minimize the loss value.",
+      "Input data features and obtain the predicted value by means of forward propagation."
+    ], answer:[0,3]},
+
+  {num:68, type:"multi", q:"Which of the following are the advantages of ReLU over Sigmoid?",
+    options:[
+      "Global derivability",
+      "Alleviation of the exploding gradient problem",
+      "Alleviation of the vanishing gradient problem",
+      "Reduced computational load"
+    ], answer:[2,3]},
+
+  {num:69, type:"multi", q:"Which of the following are speech processing tasks?",
+    options:["Language production","Speech recognition","Text-to-speech (TTS)","Language understanding"], answer:[1,2,3]},
+
+  {num:70, type:"multi", q:"Once you have deployed a ModelArts ExeML object detection model, you can test it by inputting an image. Which of the following are the output prediction results?",
+    options:[
+      "The predicted label of each detection box",
+      "The vertex coordinates of each detection box",
+      "The actual label of each detection box",
+      "The confidence of each detection box"
+    ], answer:[0,1,3]},
+
+  // 71-90 True/False (Right/Wrong)
+  {num:71, type:"tf", q:"Cloud Data Migration (CDM) of Huawei Cloud can quickly migrate Hive tables in the following procedure: It first exports MySQL data, and then copies files from the source HDFS to the destination HDFS, and finally imports the MySQL data.", answer:true},
+
+  {num:72, type:"tf", q:"You can call multiple AI capabilities, including image recognition, speech recognition, and natural language processing, using Huawei Cloud EI-API's RESTful APIs.", answer:false},
+
+  {num:73, type:"tf", q:"MindSpore is an open-source deep learning framework developed by Huawei. It simplifies AI app development and optimizes computing performance by leveraging device-edge-cloud synergy.", answer:true},
+
+  {num:74, type:"tf", q:"MRS big data clusters support deployment on both x86 and Kunpeng architectures on Huawei Cloud.", answer:true},
+
+  {num:75, type:"tf", q:"Cloud Data Migration (CDM) of Huawei Cloud can quickly migrate Hive tables in the following procedure: It first exports MySQL data, and then copies files from the source HDFS to the destination HDFS, and finally imports the MySQL data.", answer:false},
+
+  {num:76, type:"tf", q:"You can estimate the data transmission time based on the local WAN bandwidth. If data transmission cannot be completed within the estimated time, Data Express Service (DES) on the cloud would be a good option.", answer:true},
+
+  {num:77, type:"tf", q:"CodeArts PerfTest provides both real-time and offline test reports for you to view and analyze test data anytime.", answer:true},
+
+  {num:78, type:"tf", q:"Cloud Bastion Host (CBH) prevents risky external attacks on the host system.", answer:false},
+
+  {num:79, type:"tf", q:"You can view and manage the protection status and risks of any server in all regions on the same page on the HSS console.", answer:false},
+
+  {num:80, type:"tf", q:"To monitor Java applications, install APM Agents first. To monitor Python and C++ applications, there is no need to install such Agents since cloud-init collects service call data non-intrusively.", answer:false},
+
+  {num:81, type:"tf", q:"A gaming company has deployed an application on a Huawei Cloud ECS, which is in the same region and VPC as its RDS DB instance. They should use a private IP address to connect the ECS and DB instance.", answer:true},
+
+  {num:82, type:"tf", q:"Fallback is a special form of fault tolerance. When the service throughput is large and resources are insufficient, you can use fallback to disable non-critical or underperforming services to reduce resource usage and keep main services running.", answer:false},
+
+  {num:83, type:"tf", q:"RDS for MySQL read replicas have the same specifications as the primary DB instance, which improves service availability.", answer:false},
+
+  {num:84, type:"tf", q:"In HBase, HLogs ensure that data written by users is not lost upon a RegionServer failure. Multiple regions in a RegionServer have their own HLogs.", answer:false},
+
+  {num:85, type:"tf", q:"The self-supervised learning algorithm uses certain methods to \"create\" labels when a dataset has only unlabeled data.", answer:true},
+
+  {num:86, type:"tf", q:"One function of the language model is to solve the problem of multi-phonic words. After the acoustic model provides the pronunciation sequence, the language model is used to find the string sequence with the highest probability from candidate string sequences.", answer:true},
+
+  {num:87, type:"tf", q:"Models with higher performance usually have more parameters. In other words, having more parameters is better because it helps ensure higher performance.", answer:false},
+
+  {num:88, type:"tf", q:"Quantization in digital image processing converts sensor signals of sampling points into discrete integers. More quantization levels indicate more image layers. The higher the grayscale resolution, the better the image quality and less data there is.", answer:false},
+
+  {num:89, type:"tf", q:"If no activation functions are added, the neural network is linear. In this case, regardless of how many hidden layers are added, only one is used. Activation functions need to be added to make the neural network non-linear.", answer:true},
+
+  {num:90, type:"tf", q:"Huawei's ModelArts is a one-stop AI development platform that supports the entire AI development process. It does not allow multiple users to label the same dataset.", answer:false},
+];
+
+let idx = 0;
+let score = 0;
+let locked = false;
+
+const progressEl = document.getElementById("progress");
+const scoreEl = document.getElementById("score");
+const qEl = document.getElementById("question");
+const contentEl = document.getElementById("content");
+const helperEl = document.getElementById("helper");
+const nextBtn = document.getElementById("nextBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+function setTop(){
+  progressEl.textContent = `Question ${idx + 1} of ${quiz.length} (Q${quiz[idx].num})`;
+  scoreEl.textContent = `Score: ${score} / ${quiz.length}`;
+}
+
+function showHelper(html){
+  helperEl.innerHTML = html;
+  helperEl.classList.add("show");
+}
+function hideHelper(){
+  helperEl.classList.remove("show");
+  helperEl.innerHTML = "";
+}
+function lockAndEnableNext(){
+  locked = true;
+  nextBtn.disabled = false;
+}
+
+function renderSingle(q){
+  const wrap = document.createElement("div");
+  wrap.className = "options";
+
+  q.options.forEach((text, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.type = "button";
+    btn.textContent = text;
+
+    btn.onclick = () => {
+      if(locked) return;
+
+      const buttons = wrap.querySelectorAll("button");
+      buttons.forEach((b, bi) => {
+        b.disabled = true;
+        if(bi === q.answer) b.classList.add("correct");
+      });
+
+      if(i === q.answer){
+        score++;
+        showHelper(`<b>Correct ✅</b>`);
+      }else{
+        btn.classList.add("wrong");
+        showHelper(`<b>Wrong ❌</b><br><b>Correct Answer:</b> ${q.options[q.answer]}`);
+      }
+
+      lockAndEnableNext();
+      setTop();
+    };
+
+    wrap.appendChild(btn);
+  });
+
+  contentEl.appendChild(wrap);
+}
+
+function renderMulti(q){
+  const wrap = document.createElement("div");
+  wrap.className = "options";
+
+  const lines = [];
+
+  q.options.forEach((text, i) => {
+    const line = document.createElement("label");
+    line.className = "checkline";
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+
+    const span = document.createElement("div");
+    span.textContent = text;
+
+    line.appendChild(cb);
+    line.appendChild(span);
+
+    wrap.appendChild(line);
+    lines.push({line, cb});
+  });
+
+  const row = document.createElement("div");
+  row.className = "row";
+
+  const checkBtn = document.createElement("button");
+  checkBtn.className = "btn";
+  checkBtn.type = "button";
+  checkBtn.textContent = "Check Answer";
+
+  checkBtn.onclick = () => {
+    if(locked) return;
+
+    const selected = lines
+      .map((x, i) => x.cb.checked ? i : null)
+      .filter(v => v !== null);
+
+    const correctSet = new Set(q.answer);
+    const selectedSet = new Set(selected);
+
+    lines.forEach((x, i) => {
+      x.cb.disabled = true;
+      const isCorrect = correctSet.has(i);
+      const isSelected = selectedSet.has(i);
+
+      if(isCorrect) x.line.classList.add("correct");
+      if(isSelected && !isCorrect) x.line.classList.add("wrong");
+    });
+
+    const isExactlyCorrect =
+      selected.length === q.answer.length &&
+      selected.every(i => correctSet.has(i));
+
+    if(isExactlyCorrect){
+      score++;
+      showHelper(`<b>Correct ✅</b>`);
+    }else{
+      const correctLetters = q.answer.map(i => String.fromCharCode(65+i)).join(", ");
+      showHelper(`<b>Wrong ❌</b><br><b>Correct option(s):</b> ${correctLetters}`);
+    }
+
+    lockAndEnableNext();
+    setTop();
+  };
+
+  row.appendChild(checkBtn);
+  contentEl.appendChild(wrap);
+  contentEl.appendChild(row);
+}
+
+function renderTF(q){
+  const wrap = document.createElement("div");
+  wrap.className = "options";
+
+  const makeBtn = (label, val) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.type = "button";
+    btn.textContent = label;
+
+    btn.onclick = () => {
+      if(locked) return;
+
+      const buttons = wrap.querySelectorAll("button");
+      buttons.forEach(b => b.disabled = true);
+
+      const correctLabel = q.answer ? "True" : "False";
+      const correctBtn = [...buttons].find(b => b.textContent === correctLabel);
+      if(correctBtn) correctBtn.classList.add("correct");
+
+      if(val === q.answer){
+        score++;
+        showHelper(`<b>Correct ✅</b>`);
+      }else{
+        btn.classList.add("wrong");
+        showHelper(`<b>Wrong ❌</b><br><b>Correct Answer:</b> ${correctLabel}`);
+      }
+
+      lockAndEnableNext();
+      setTop();
+    };
+    return btn;
+  };
+
+  wrap.appendChild(makeBtn("True", true));
+  wrap.appendChild(makeBtn("False", false));
+  contentEl.appendChild(wrap);
+}
+
+function render(){
+  locked = false;
+  nextBtn.disabled = true;
+  contentEl.innerHTML = "";
+  hideHelper();
+
+  const q = quiz[idx];
+  setTop();
+  qEl.textContent = q.q;
+
+  if(q.type === "single") renderSingle(q);
+  else if(q.type === "multi") renderMulti(q);
+  else if(q.type === "tf") renderTF(q);
+}
+
+function finish(){
+  const card = document.getElementById("card");
+  card.innerHTML = `
+    <div class="top">
+      <div class="meta">Completed</div>
+      <div class="score">Final Score: ${score} / ${quiz.length}</div>
+    </div>
+    <div class="question" style="margin-top:12px">🎉 Quiz Completed</div>
+    <div class="helper show" style="margin-top:12px">
+      You answered <b>${score}</b> correctly out of <b>${quiz.length}</b>.
+    </div>
+    <div class="footer" style="margin-top:16px">
+      <button class="btn" onclick="location.reload()">Restart</button>
+    </div>
+  `;
+}
+
+nextBtn.addEventListener("click", () => {
+  idx++;
+  if(idx < quiz.length) render();
+  else finish();
+});
+
+restartBtn.addEventListener("click", () => location.reload());
+
+render();
+</script>
+</body>
+</html>
